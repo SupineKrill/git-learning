@@ -49,4 +49,4 @@ def scrape_xkcd(download_number=1):
 if __name__ == '__main__':
     scrape_xkcd()
 
-#Comment for push 3
+#Comment for linux push
