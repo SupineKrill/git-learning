@@ -2,13 +2,23 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import re
+import os
+import sys
 
-def scrape_xkcd(download_number=1):
+
+def scrape_xkcd(download_number=0):
+    if len(sys.argv) >= 2:
+        download_number = int(sys.argv[1])
     comic_tracker = download_number
-    if download_number != 1:
+    try:
+        os.mkdir("XKCD")
+    except FileExistsError:
+        pass
+    if download_number != 0:
         end_early = True
     else:
         end_early = False
+        comic_tracker += 1
     next_accesskey = 'first'
     while True:
         if comic_tracker != 1525:
@@ -25,7 +35,7 @@ def scrape_xkcd(download_number=1):
                 comic_tracker += 1
                 continue
             img_name = table.img['alt']
-            img_name = re.sub("[^0-9a-zA-Z\s]+","", img_name)
+            img_name = re.sub("[^0-9a-zA-Z\s]+", "", img_name)
             img = table.img['src']
             xkcd_alt = table.img['title']
             xkcd_alt = ''.join([i if ord(i) < 128 else '*' for i in xkcd_alt])
@@ -34,16 +44,16 @@ def scrape_xkcd(download_number=1):
             img_url = "http://www." + img_url
             print(img_url)
             g = urllib.request.urlopen(img_url)
-            with open("C:/Users/SupineKrill/Downloads/XKCD/"+img_name+".png", 'b+w') as f:
+            with open(os.path.join("XKCD", img_name + ".png"), 'b+w') as f:
                 f.write(g.read())
                 print("Successfully downloaded " + img_name + " - #" + str(comic_tracker))
-            with open("C:/Users/SupineKrill/Downloads/XKCD/"+img_name+".txt", 'w') as f:
+            with open(os.path.join("XKCD", img_name + ".txt"), 'w') as f:
                 f.write(xkcd_alt_file_name)
                 print("Saved alt-text")
             if next_accesskey == ['n']:
                 return 0
         comic_tracker += 1
-        if end_early == True:
+        if end_early:
             break
 
 if __name__ == '__main__':
