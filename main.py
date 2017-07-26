@@ -42,9 +42,10 @@ def scrape_xkcd(download_number=0):
             xkcd_alt_file_name = re.sub("[^0-9a-zA-Z\s]+", "*", xkcd_alt)
             img_url = img[2:]
             img_url = "http://www." + img_url
+            img_ext = img[len(img)-4:]
             print(img_url)
             g = urllib.request.urlopen(img_url)
-            with open(os.path.join("XKCD", img_name + ".png"), 'b+w') as f:
+            with open(os.path.join("XKCD", img_name + img_ext), 'b+w') as f:
                 f.write(g.read())
                 print("Successfully downloaded " + img_name + " - #" + str(comic_tracker))
             with open(os.path.join("XKCD", img_name + ".txt"), 'w') as f:
