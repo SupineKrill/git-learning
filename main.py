@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import urllib
+from urllib import request
 import re
 import os
 import sys
@@ -44,7 +44,7 @@ def scrape_xkcd(download_number=0):
             img_url = "http://www." + img_url
             img_ext = img[len(img)-4:]
             print(img_url)
-            g = urllib.request.urlopen(img_url)
+            g = request.urlopen(img_url)
             with open(os.path.join("XKCD", img_name + img_ext), 'b+w') as f:
                 f.write(g.read())
                 print("Successfully downloaded " + img_name + " - #" + str(comic_tracker))
@@ -59,5 +59,3 @@ def scrape_xkcd(download_number=0):
 
 if __name__ == '__main__':
     scrape_xkcd()
-
-#Comment for linux push 5
